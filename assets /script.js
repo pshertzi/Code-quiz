@@ -1,67 +1,72 @@
+//time 
+var time = document.querySelector(".timer");
+var score = document.querySelector("#score");
+var secondsLeft = 75;
+
+//questions
 var containerQuestionEl = document.getElementById("question-container");
-      var containerStartEl = document.getElementById("starter-container");
-      var containerEndEl = document.getElementById("end-container")
-      var containerScoreEl = document.getElementById("score-banner")
-      var formInitials = document.getElementById("initials-form")
-      var containerHighScoresEl = document.getElementById("high-score-container")
-      var ViewHighScoreEl = document.getElementById("view-high-scores")
-      var listHighScoreEl = document.getElementById("high-score-list")
-      var correctEl = document.getElementById("correct")
-      var wrongEl = document.getElementById("wrong")
-      //buttons
-      var btnStartEl = document.querySelector("#start-game");
-      var btnGoBackEl = document.querySelector("#go-back")
-      var btnClearScoresEl = document.querySelector("#clear-high-scores")
-      //questions/answers element
-      var questionEl = document.getElementById("question")
-      var answerbuttonsEl = document.getElementById("answer-buttons")
-      var timerEl = document.querySelector("#timer");
-      var score = 0;
-      var timeleft;
-      var gameover
-      timerEl.innerText = 0;
-
-      //High Score Array
-      var HighScores = [];
-
-       //assign array details for questions 
-      var arrayShuffledQuestions
-      var QuestionIndex = 0
-
-    
+var containerStartEl = document.getElementById("starter-container");
+var containerEndEl = document.getElementById("end-container")
+var containerScoreEl = document.getElementById("score-banner")
+var formInitials = document.getElementById("initials-form")
+var containerHighScoresEl = document.getElementById("high-score-container")
+var ViewHighScoreEl = document.getElementById("view-high-scores")
+var listHighScoreEl = document.getElementById("high-score-list")
+var correctEl = document.getElementById("correct")
+var wrongEl = document.getElementById("wrong")
       
-   //Questions
-   var questions = [
-    {q: "Inside which HTML element do we put the JavaScript?",
+      
+//buttons
+var btnStartEl = document.querySelector("#start-game");
+var btnGoBackEl = document.querySelector("#go-back")
+var btnClearScoresEl = document.querySelector("#clear-high-scores")
+      
+//questions/answers element
+var questionEl = document.getElementById("question")
+var answerbuttonsEl = document.getElementById("answer-buttons")
+var timerEl = document.querySelector("#timer");
+var score = 0;
+var gameover
+
+
+//High Score array
+var HighScores = [];
+
+//assign array details for questions 
+var arrayShuffledQuestions
+var QuestionIndex = 0
+
+//Questions
+var questions = [
+{q: "Inside which HTML element do we put the JavaScript?",
     choices: [{choice: "a. <javascript>"} , {choice: "b. <js>"}, {choice:"c. <script>"} , {choice: "d. wherever I do what i want"}],
     a: "c. <script>"
     },
-    {q: "Arrays in JavaScript can be used to store_____.",
+{q: "Arrays in JavaScript can be used to store_____.",
     choices: [{choice: "a. other arrays"} ,{choice: "b. booleans"} ,{choice: "c. numbers and strings"} ,{choice: "d. all of the above"}],
     a: "d. all of the above"
     },
-    {q: "How do you create a function in JavaScripts",
+{q: "How do you create a function in JavaScripts",
     choices: [{ choice: "a. sing Conjunction Junction what's your function form School house rock"} ,{choice: "b. function = myFunction()"} ,{choice: "c. function:myfunction()"} ,{choice: "d.function myFunction()"}],
     answer: "d. function myFunction()"
     },
-    {q: "How do you call a function named myFunction",
+{q: "How do you call a function named myFunction",
     choices: [{choice: "a. myFunction()"} ,{choice:"b. pick up a phone"} ,{choice: "c. call myFunction()"},{choice: "d. call function myFunction()"}],
     a: "a. myFunction()"
     },
-    {q: "The first index of an array is___",
+{q: "The first index of an array is___",
     choices: [{choice: "a. 1"} ,{choice: "b. any"} ,{choice: "c. 0"} ,{choice: "d.That's Amore"}],
     a: "c. 0"
     },
-    {q: "What is getItem commonly used for",
+{q: "What is getItem commonly used for",
     choices: [{ choice: "a. getting an item from html"} ,{choice: "b. local storage"} ,{choice: "c. managing your inventory in a RPG"},{choice: "d. naming a variable"}],
     a: "b. local storage"
     },
-    {q: "What is used primarily to add styling to a web page",
+{q: "What is used primarily to add styling to a web page",
     choices: [{choice:"a. HTML"} ,{choice: "b. CSS"},{choice: "c. your local barber"} ,{choice: "d. Python"}],
     a: "b. CSS"
     },
-    {
-    q:  "___ is a very useful tool used during development and debugging for printing content to the debugger is:",
+{q:  "___ is a very useful tool used during development and debugging for printing content to the debugger is:",
     choices: [{choice: "a. Yelling at the computer until it works"},{choice:"b. console.log"} ,{choice: "c. terminal/bash"} ,{choice: "d. JavaScript"}],
     a: "b. console.log"
     },
@@ -90,25 +95,19 @@ var containerQuestionEl = document.getElementById("question-container");
         }
     }
 
-    //every second, check if game-over is true, or if there is time left. Start time at 30. 
-    var setTime = function () {
-        timeleft = 75;
+    // TIMER FUNCTION STARTS PROCESS 
+    function setTime() {
+        let timerInterval = setInterval(function () {
+            secondsLeft--;
+            time.textContent = `Time:${secondsLeft}s`;
 
-    var timercheck = setInterval(function() {
-        timerEl.innerText = timeleft;
-        timeleft--
-
-        if (gameover) {
-            clearInterval(timercheck)
-        }
-       
-        if (timeleft < 0) {
-            showScore()
-            timerEl.innerText = 0
-            clearInterval(timercheck)
-        }
-
-        }, 1000)
+         if (secondsLeft === 0 || questionCount === questions.length) {
+            clearInterval(timerInterval);
+            questionsEl.style.display = "none";
+            finalEl.style.display = "block";
+            score.textContent = secondsLeft;
+            }
+        }, 1000);
     }
 
     var startGame = function() {
@@ -178,7 +177,7 @@ var containerQuestionEl = document.getElementById("question-container");
             else {
               answerWrong()
               score = score - 1;
-              timeleft = timeleft - 3;
+              secondsLeft = secondsLeft - 5;
           };
 
         //go to next question, check if there is more questions
